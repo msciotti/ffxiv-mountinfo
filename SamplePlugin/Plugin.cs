@@ -10,43 +10,55 @@ using Lumina.Excel.GeneratedSheets;
 using System;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using System.Numerics;
-using Lumina.Extensions;
 using System.Collections.Generic;
+using Dalamud.Interface.Internal;
+using Dalamud.Interface.Utility;
+using SamplePlugin.Windows;
+using Dalamud.Interface.Windowing;
+using Lumina.Extensions;
 using System.Linq;
 
-namespace MountPlugin;
+namespace SamplePlugin;
 
-public sealed class MountPlugin : IDalamudPlugin
+public sealed class Plugin : IDalamudPlugin
 {
     public string Name => "Mount Plugin";
 
     private DalamudPluginInterface PluginInterface { get; init; }
+    public Configuration Configuration { get; init; }
     private ICommandManager CommandManager { get; init; }
     private IClientState ClientState { get; init; }
     private ITargetManager TargetManager { get; init; }
     private IObjectTable ObjectTable { get; init; }
     private IGameGui GameGui { get; init; }
+    private ITextureProvider TextureProvider { get; init; }
     private GameData GameData { get; init; }
+    public readonly WindowSystem WindowSystem = new("SamePlugin");
+    private ConfigWindow ConfigWindow { get; init; }
     private bool showWindow;
 
     // Dictionary to cache mount icons
-    private Dictionary<uint, IntPtr> mountIconCache = new Dictionary<uint, IntPtr>();
+    private Dictionary<uint, IDalamudTextureWrap> mountIconCache = new Dictionary<uint, IDalamudTextureWrap>();
     private const int MaxCacheSize = 100;
-    private bool previousTargetBarVisibleState = false;
 
-    public MountPlugin(
+    public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
         [RequiredVersion("1.0")] IClientState clientState,
         [RequiredVersion("1.0")] ICommandManager commandManager,
         [RequiredVersion("1.0")] ITargetManager targetManager,
         [RequiredVersion("1.0")] IObjectTable objectTable,
-        [RequiredVersion("1.0")] IGameGui gameGui) {
+        [RequiredVersion("1.0")] IGameGui gameGui,
+        [RequiredVersion("1.0")] ITextureProvider textureProvider) {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
         ClientState = clientState;
         TargetManager = targetManager;
         ObjectTable = objectTable;
         GameGui = gameGui;
+        TextureProvider = textureProvider;
+
+        Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        Configuration.Initialize(PluginInterface);
 
         var sqPackPath = "D:\\Games\\Steam\\steamapps\\common\\FINAL FANTASY XIV ONLINE\\game\\sqpack";
         if (string.IsNullOrEmpty(sqPackPath))
@@ -55,25 +67,26 @@ public sealed class MountPlugin : IDalamudPlugin
         }
         GameData = new GameData(sqPackPath);
 
+        ConfigWindow = new ConfigWindow(this);
+        WindowSystem.AddWindow(ConfigWindow);
+
         CommandManager.AddHandler("/mountinfo", new CommandInfo(OnCommand)
         {
             HelpMessage = "Show mount information of nearby players"
         });
 
         PluginInterface.UiBuilder.Draw += DrawUI;
-        PluginInterface.UiBuilder.OpenConfigUi += DrawUI;
+        PluginInterface.UiBuilder.OpenConfigUi += () => ConfigWindow.Toggle();
     }
 
     public void Dispose()
     {
+        WindowSystem.RemoveAllWindows();
+
         CommandManager.RemoveHandler("/mountinfo");
         PluginInterface.UiBuilder.Draw -= DrawUI;
         GameData?.Dispose();
         // Free cached textures
-        foreach (var icon in mountIconCache.Values)
-        {
-            ImGui.MemFree(icon);
-        }
         mountIconCache.Clear();
     }
 
@@ -89,93 +102,37 @@ public sealed class MountPlugin : IDalamudPlugin
         var target = TargetManager.Target;
         if (target != null && target is PlayerCharacter playerCharacter)
         {
-            var isFocused = GetTargetHealthBarFocused(playerCharacter);
-
-            // Only show the mount icon when the target bar is visible
-            // Only render state changes
-            if (!isFocused)
-            {
-                previousTargetBarVisibleState = false;
-                return;
-            }
-            if (previousTargetBarVisibleState && isFocused)
-            {
-                return;
-            }
-            previousTargetBarVisibleState = true;
-
             var mountID = GetMountID(playerCharacter);
             if (mountID > 0)
             {
                 var mountName = GetMountNameById(mountID);
-                var mountIconTexture = GetMountIconTexture(mountID);
-
-                if (mountIconTexture == IntPtr.Zero)
-                {
-                    ImGui.Text("Mount icon not found");
-                    return;
-                }
+                var mountIconID = GetMountIconID(mountID);
 
                 var nameplatePosition = GetTargetHealthBarPosition(playerCharacter);
                 if (nameplatePosition.HasValue)
                 {
-                    try
+                    
+                    var iconPosition = nameplatePosition.Value + new Vector2(Configuration.xOffset, Configuration.yOffset); // Adjust position as needed
+                    ImGui.SetNextWindowPos(iconPosition, ImGuiCond.Always);
+                    if (ImGui.Begin("MountIcon", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoMove))
                     {
-                        var iconSize = new Vector2(32, 32); // Adjust icon size as needed
-                        var iconPosition = nameplatePosition.Value + new Vector2(0, 20); // Adjust position as needed
-
-                        ImGui.SetNextWindowPos(iconPosition, ImGuiCond.Always);
-                        if (ImGui.Begin("MountIcon", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoMove))
+                        if (TextureProvider.GetIcon(mountIconID) is { ImGuiHandle: var mountIconTextureHandle } unknownTexture)
                         {
-                            ImGui.Image(mountIconTexture, iconSize);
 
+                            ImGui.Image(mountIconTextureHandle, ImGuiHelpers.ScaledVector2(Configuration.scale, Configuration.scale));
                             //// Show tooltip with mount name on hover
-                            //if (ImGui.IsItemHovered())
-                            //{
-                            //    ImGui.SetTooltip(mountName);
-                            //}
-
-                            ImGui.End();
+                            if (ImGui.IsItemHovered())
+                            {
+                                ImGui.SetTooltip($"Riding: {mountName}");
+                            }
                         }
-                        else
-                        {
-                            Console.WriteLine("Failed to create window");
-                        }
+                         
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"THE THING BROKE DUDE: {ex}");
-                    }
+                    ImGui.End();
+                    
                 }
             }
         }
-    }
-
-    private IntPtr GetMountIconTexture(uint mountObjectID)
-    {
-        if (!mountIconCache.TryGetValue(mountObjectID, out var texture))
-        {
-            var mountRow = GameData.GetExcelSheet<Mount>()?.GetRow(mountObjectID);
-            if (mountRow != null)
-            {
-                var icon = GameData.GetIcon(mountRow.Icon);
-                if (icon != null)
-                {
-                    texture = PluginInterface.UiBuilder.LoadImageRaw(icon.Data, icon.Header.Width, icon.Header.Height, 4).ImGuiHandle;
-                    mountIconCache[mountObjectID] = texture;
-
-                    if(mountIconCache.Count > MaxCacheSize)
-                    {
-                        // Free the oldest texture
-                        var oldestKey = mountIconCache.Keys.First();
-                        var oldestTexture = mountIconCache[oldestKey];
-                        ImGui.MemFree(oldestTexture);
-                        mountIconCache.Remove(oldestKey);
-                    }
-                }
-            }
-        }
-        return texture;
     }
 
     private unsafe uint GetMountID(PlayerCharacter playerCharacter)
@@ -201,6 +158,13 @@ public sealed class MountPlugin : IDalamudPlugin
             }
         }
         return "Unknown Mount";
+    }
+    
+    private uint GetMountIconID(uint mountID)
+    {
+        var mountRow = GameData.GetExcelSheet<Mount>().GetRow(mountID);
+        if (mountRow == null) return 0;
+        return mountRow.Icon;
     }
 
     private unsafe Vector2? GetTargetHealthBarPosition(PlayerCharacter playerCharacter)

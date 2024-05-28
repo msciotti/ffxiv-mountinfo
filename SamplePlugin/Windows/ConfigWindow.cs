@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
+
 
 namespace SamplePlugin.Windows;
 
@@ -12,14 +13,9 @@ public class ConfigWindow : Window, IDisposable
     // We give this window a constant ID using ###
     // This allows for labels being dynamic, like "{FPS Counter}fps###XYZ counter window",
     // and the window ID will always be "###XYZ counter window" for ImGui
-    public ConfigWindow(Plugin plugin) : base("A Wonderful Configuration Window###With a constant ID")
+    public ConfigWindow(Plugin plugin) : base("Mount Plugin Config")
     {
-        Flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
-                ImGuiWindowFlags.NoScrollWithMouse;
-
         Size = new Vector2(232, 75);
-        SizeCondition = ImGuiCond.Always;
-
         Configuration = plugin.Configuration;
     }
 
@@ -40,12 +36,24 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        // can't ref a property, so use a local copy
-        var configValue = Configuration.SomePropertyToBeSavedAndWithADefault;
-        if (ImGui.Checkbox("Random Config Bool", ref configValue))
+        var xOffset = Configuration.xOffset;
+        if (ImGui.SliderFloat("X Offset", ref xOffset, -100, 100))
         {
-            Configuration.SomePropertyToBeSavedAndWithADefault = configValue;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
+            Configuration.xOffset = (int)xOffset;
+            Configuration.Save();
+        }
+
+        var yOffset = Configuration.yOffset;
+        if (ImGui.SliderFloat("Y Offset", ref yOffset, -100, 100))
+        {
+            Configuration.yOffset = (int)yOffset;
+            Configuration.Save();
+        }
+
+        var scale = Configuration.scale;
+        if (ImGui.SliderFloat("Scale", ref scale, 0.1f, 2.0f))
+        {
+            Configuration.scale = scale;
             Configuration.Save();
         }
 
