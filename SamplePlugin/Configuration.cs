@@ -7,10 +7,10 @@ namespace SamplePlugin;
 [Serializable]
 public class Configuration : IPluginConfiguration
 {
+    private DalamudPluginInterface pluginInterface;
     public int Version { get; set; } = 0;
 
-    public bool IsConfigWindowMovable { get; set; } = true;
-    public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
+
     public float xOffset { get; set; } = -35.0f;
     public float yOffset { get; set; } = -30.0f;
     public float scale { get; set; } = 20.0f;
@@ -22,6 +22,13 @@ public class Configuration : IPluginConfiguration
     public void Initialize(DalamudPluginInterface pluginInterface)
     {
         PluginInterface = pluginInterface;
+    }
+
+    public static Configuration Get(DalamudPluginInterface pluginInterface)
+    {
+        var config = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        config.pluginInterface = pluginInterface;
+        return config;
     }
 
     public void Save()

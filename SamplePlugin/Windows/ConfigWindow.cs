@@ -13,26 +13,15 @@ public class ConfigWindow : Window, IDisposable
     // We give this window a constant ID using ###
     // This allows for labels being dynamic, like "{FPS Counter}fps###XYZ counter window",
     // and the window ID will always be "###XYZ counter window" for ImGui
-    public ConfigWindow(Plugin plugin) : base("Mount Plugin Config")
+    public ConfigWindow(Plugin plugin) : base("Mount Plugin Config", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
     {
-        Size = new Vector2(232, 75);
+        Size = new Vector2(500, 232);
         Configuration = plugin.Configuration;
     }
 
     public void Dispose() { }
 
-    public override void PreDraw()
-    {
-        // Flags must be added or removed before Draw() is being called, or they won't apply
-        if (Configuration.IsConfigWindowMovable)
-        {
-            Flags &= ~ImGuiWindowFlags.NoMove;
-        }
-        else
-        {
-            Flags |= ImGuiWindowFlags.NoMove;
-        }
-    }
+    public override void PreDraw() { }
 
     public override void Draw()
     {
@@ -51,16 +40,9 @@ public class ConfigWindow : Window, IDisposable
         }
 
         var scale = Configuration.scale;
-        if (ImGui.SliderFloat("Scale", ref scale, 0.1f, 2.0f))
+        if (ImGui.SliderFloat("Scale", ref scale, 20.0f, 50.0f))
         {
             Configuration.scale = scale;
-            Configuration.Save();
-        }
-
-        var movable = Configuration.IsConfigWindowMovable;
-        if (ImGui.Checkbox("Movable Config Window", ref movable))
-        {
-            Configuration.IsConfigWindowMovable = movable;
             Configuration.Save();
         }
     }
