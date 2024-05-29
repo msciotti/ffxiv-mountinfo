@@ -17,7 +17,7 @@ public sealed class MountInfoPlugin : IDalamudPlugin
         Configuration = Configuration.Get(pluginInterface);
         ConfigWindow = new ConfigWindow(this);
         MountInfoWindow = new MountInfoWindow(this);
-        WindowSystem = new WindowSystem("SamplePlugin");
+        WindowSystem = new WindowSystem("MountInfoPlugin");
 
         WindowSystem.AddWindow(ConfigWindow);
         WindowSystem.AddWindow(MountInfoWindow);

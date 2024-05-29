@@ -14,6 +14,7 @@ internal class Service
     [PluginService] internal static IObjectTable ObjectTable { get; private set; }
     [PluginService] internal static IGameGui GameGui { get; private set; }
     [PluginService] internal static ITextureProvider TextureProvider { get; private set; }
+    [PluginService] internal static IDataManager DataManager { get; private set; }
 
     internal static void Initialize(DalamudPluginInterface pluginInterface)
     {

@@ -1,6 +1,5 @@
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using Lumina;
 using Lumina.Excel.GeneratedSheets;
 using System.Numerics;
 
@@ -8,9 +7,6 @@ namespace MountInfo
 {
     public static class Helpers
     {
-        private static string SqPackPath = "D:\\Games\\Steam\\steamapps\\common\\FINAL FANTASY XIV ONLINE\\game\\sqpack";
-        public static GameData GameData = new(SqPackPath);
-
         public static unsafe uint GetMountID(PlayerCharacter playerCharacter)
         {
             var characterPtr = (FFXIVClientStructs.FFXIV.Client.Game.Character.Character*)playerCharacter.Address;
@@ -25,20 +21,19 @@ namespace MountInfo
 
         public static unsafe string GetMountNameById(uint mountObjectID)
         {
-            if (GameData != null)
+
+            var mountRow = Service.DataManager.GetExcelSheet<Mount>()?.GetRow(mountObjectID);
+            if (mountRow != null)
             {
-                var mountRow = GameData.GetExcelSheet<Mount>().GetRow(mountObjectID);
-                if (mountRow != null)
-                {
-                    return mountRow.Singular;
-                }
+                return mountRow.Singular;
             }
+            
             return "Unknown Mount";
         }
 
         public static uint GetMountIconID(uint mountID)
         {
-            var mountRow = GameData.GetExcelSheet<Mount>().GetRow(mountID);
+            var mountRow = Service.DataManager.GetExcelSheet<Mount>()?.GetRow(mountID);
             if (mountRow == null) return 0;
             return mountRow.Icon;
         }
@@ -62,7 +57,7 @@ namespace MountInfo
             var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfo");
             if (targetInfoHud == null) return false;
 
-            var healthBarNode = (AtkResNode*)targetInfoHud->RootNode->ChildNode;
+            var healthBarNode = targetInfoHud->RootNode->ChildNode;
             if (healthBarNode == null) return false;
 
             return healthBarNode->IsVisible;
