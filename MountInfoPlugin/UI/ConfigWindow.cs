@@ -21,6 +21,12 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
+        var enabled = Configuration.enabled;
+        if (ImGui.Checkbox("Enabled", ref enabled))
+        {
+            Configuration.enabled = enabled;
+            Configuration.Save();
+        }
         var xOffset = Configuration.xOffset;
         if (ImGui.SliderFloat("X Offset", ref xOffset, -100, 200))
         {

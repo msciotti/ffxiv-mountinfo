@@ -14,6 +14,7 @@ public class Configuration : IPluginConfiguration
     public float xOffset { get; set; } = -45.0f;
     public float yOffset { get; set; } = 25.0f;
     public float scale { get; set; } = 30.0f;
+    public bool enabled { get; set; } = true;
 
     // the below exist just to make saving less cumbersome
     [NonSerialized]

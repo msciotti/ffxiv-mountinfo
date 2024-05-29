@@ -16,9 +16,15 @@ public class MountInfoWindow : Window, IDisposable
     {
         this.plugin = plugin;
         Size = new Vector2(275, 275);
+        IsOpen = plugin.Configuration.enabled;
     }
 
     public void Dispose() { }
+
+    public override bool DrawConditions()
+    {
+        return plugin.Configuration.enabled;
+    }
 
     public override void PreDraw() 
     {
