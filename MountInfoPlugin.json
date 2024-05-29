@@ -1,19 +1,22 @@
-{
-    "Author": "msciotti",
-    "Name": "MountInfo",
-    "InternalName": "MountInfoPlugin",
-    "AssemblyVersion": "1.0.0.0",
-    "Description": "See what mounts other players are riding. /mountinfo to toggle on and off",
-    "ApplicableVersion": "any",
-    "Tags": [
-        "Mounts",
-        "Mount"
-    ],
-    "IsHide": false,
-    "RepoUrl": "https://github.com/msciotti/ffxiv-mountinfo",
-    "DalamudApiLevel": 9,
-    "IconUrl": "https://ffxiv.gamerescape.com/w/images/b/b0/MainIcon58.png",
-    "Punchline": "See what mounts other players are riding.",
-    "DownloadLinkInstall": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip",
-    "DownloadLinkUpdate": "https://github.com/Ottermandias/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip"
-}
+[
+    {
+        "Author": "msciotti",
+        "Name": "MountInfo",
+        "InternalName": "MountInfoPlugin",
+        "AssemblyVersion": "1.0.0.0",
+        "Description": "See what mounts other players are riding. /mountinfo to toggle on and off",
+        "ApplicableVersion": "any",
+        "Tags": [
+            "Mounts",
+            "Mount"
+        ],
+        "IsHide": false,
+        "RepoUrl": "https://github.com/msciotti/ffxiv-mountinfo",
+        "DalamudApiLevel": 9,
+        "IconUrl": "https://ffxiv.gamerescape.com/w/images/b/b0/MainIcon58.png",
+        "Punchline": "See what mounts other players are riding.",
+        "DownloadLinkInstall": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip",
+        "DownloadLinkUpdate": "https://github.com/Ottermandias/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip"
+    }
+]
+
