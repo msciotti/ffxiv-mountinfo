@@ -9,14 +9,11 @@
         "Mounts",
         "Mount"
     ],
+    "IsHide": false,
+    "RepoUrl": "https://github.com/msciotti/ffxiv-mountinfo",
     "DalamudApiLevel": 9,
-    "LoadRequiredState": 0,
-    "LoadSync": false,
-    "CanUnloadAsync": false,
-    "LoadPriority": 0,
     "IconUrl": "https://ffxiv.gamerescape.com/w/images/b/b0/MainIcon58.png",
     "Punchline": "See what mounts other players are riding.",
-    "AcceptsFeedback": true,
     "DownloadLinkInstall": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip",
     "DownloadLinkUpdate": "https://github.com/Ottermandias/ffxiv-mountinfo/releases/download/release_1.0.0.0/MountInfo.zip"
 }
