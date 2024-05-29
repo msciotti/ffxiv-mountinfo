@@ -8,4 +8,4 @@ The icon is anchored to your target's healthbar. It can be scaled in size and mo
 
 # Installation
 
-todo
+Copy `https://raw.githubusercontent.com/msciotti/ffxiv-mountinfo/main/MountInfo.json` to your custom repos in Dalamud.
