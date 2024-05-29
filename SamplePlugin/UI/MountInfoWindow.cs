@@ -6,13 +6,13 @@ using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
 
-namespace SamplePlugin.Windows;
+namespace MountInfo.UI;
 
 public class MountInfoWindow : Window, IDisposable
 {
-    private readonly Plugin plugin;
+    private readonly MountInfoPlugin plugin;
 
-    public MountInfoWindow(Plugin plugin) : base("Mount Plugin Main", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground)
+    public MountInfoWindow(MountInfoPlugin plugin) : base("MountInfoPlugin###Main", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground)
     {
         this.plugin = plugin;
         Size = new Vector2(275, 275);

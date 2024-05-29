@@ -1,0 +1,13 @@
+{
+  "Author": "msciotti",
+  "Name": "MountInfo",
+  "Punchline": "See what mounts other players are riding.",
+  "Description": "See what mounts other players are riding. /mountinfo to toggle on and off",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "ffxiv",
+    "plugin",
+    "mounts",
+    "mount"
+  ]
+}

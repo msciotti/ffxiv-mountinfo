@@ -1,21 +1,18 @@
 using Dalamud.Game.Command;
 using Dalamud.Plugin;
-using Lumina;
-using System;
-using SamplePlugin.Windows;
+using MountInfo.UI;
 using Dalamud.Interface.Windowing;
 
-namespace SamplePlugin;
+namespace MountInfo;
 
-public sealed class Plugin : IDalamudPlugin
+public sealed class MountInfoPlugin : IDalamudPlugin
 {
     public Configuration Configuration { get; }
     public WindowSystem WindowSystem { get; }
     private ConfigWindow ConfigWindow { get; }
     public MountInfoWindow MountInfoWindow { get; }
-    public GameData GameData { get; }
 
-    public Plugin(DalamudPluginInterface pluginInterface) {
+    public MountInfoPlugin(DalamudPluginInterface pluginInterface) {
         Service.Initialize(pluginInterface);
         Configuration = Configuration.Get(pluginInterface);
         ConfigWindow = new ConfigWindow(this);
@@ -29,7 +26,7 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.OpenMainUi += MountInfoWindow.Toggle;
         pluginInterface.UiBuilder.OpenConfigUi += ConfigWindow.Toggle;
 
-        var commandInfo = new CommandInfo((_, _) => MountInfoWindow.Toggle()) { HelpMessage = "Show mount information of nearby players" };
+        var commandInfo = new CommandInfo((_, _) => MountInfoWindow.Toggle()) { HelpMessage = "Show mount information of target player" };
         Service.CommandManager.AddHandler("/mountinfo", commandInfo);
     }
 

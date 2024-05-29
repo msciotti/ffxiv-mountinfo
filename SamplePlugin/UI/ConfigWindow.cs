@@ -3,17 +3,13 @@ using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
-
-namespace SamplePlugin.Windows;
+namespace MountInfo.UI;
 
 public class ConfigWindow : Window, IDisposable
 {
     private Configuration Configuration;
 
-    // We give this window a constant ID using ###
-    // This allows for labels being dynamic, like "{FPS Counter}fps###XYZ counter window",
-    // and the window ID will always be "###XYZ counter window" for ImGui
-    public ConfigWindow(Plugin plugin) : base("Mount Plugin Config", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
+    public ConfigWindow(MountInfoPlugin plugin) : base("MountInfoPlugin###Config", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
     {
         Size = new Vector2(500, 232);
         Configuration = plugin.Configuration;
@@ -26,14 +22,14 @@ public class ConfigWindow : Window, IDisposable
     public override void Draw()
     {
         var xOffset = Configuration.xOffset;
-        if (ImGui.SliderFloat("X Offset", ref xOffset, -100, 100))
+        if (ImGui.SliderFloat("X Offset", ref xOffset, -100, 200))
         {
             Configuration.xOffset = (int)xOffset;
             Configuration.Save();
         }
 
         var yOffset = Configuration.yOffset;
-        if (ImGui.SliderFloat("Y Offset", ref yOffset, -100, 100))
+        if (ImGui.SliderFloat("Y Offset", ref yOffset, -100, 200))
         {
             Configuration.yOffset = (int)yOffset;
             Configuration.Save();

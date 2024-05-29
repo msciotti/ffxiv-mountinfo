@@ -4,7 +4,7 @@ using Lumina;
 using Lumina.Excel.GeneratedSheets;
 using System.Numerics;
 
-namespace SamplePlugin
+namespace MountInfo
 {
     public static class Helpers
     {

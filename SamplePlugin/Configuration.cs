@@ -2,7 +2,7 @@ using Dalamud.Configuration;
 using Dalamud.Plugin;
 using System;
 
-namespace SamplePlugin;
+namespace MountInfo;
 
 [Serializable]
 public class Configuration : IPluginConfiguration
@@ -11,9 +11,9 @@ public class Configuration : IPluginConfiguration
     public int Version { get; set; } = 0;
 
 
-    public float xOffset { get; set; } = -35.0f;
-    public float yOffset { get; set; } = -30.0f;
-    public float scale { get; set; } = 20.0f;
+    public float xOffset { get; set; } = -45.0f;
+    public float yOffset { get; set; } = 25.0f;
+    public float scale { get; set; } = 30.0f;
 
     // the below exist just to make saving less cumbersome
     [NonSerialized]
