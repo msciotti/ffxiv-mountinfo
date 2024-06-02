@@ -15,7 +15,6 @@ public class MountInfoWindow : Window, IDisposable
     public MountInfoWindow(MountInfoPlugin plugin) : base("MountInfoPlugin###Main", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground)
     {
         this.plugin = plugin;
-        Size = new Vector2(275, 275);
         IsOpen = plugin.Configuration.enabled;
     }
 
@@ -23,7 +22,10 @@ public class MountInfoWindow : Window, IDisposable
 
     public override bool DrawConditions()
     {
-        return plugin.Configuration.enabled;
+        if (!plugin.Configuration.enabled) return false;
+        if (Service.TargetManager.Target == null) return false;
+
+        return true;
     }
 
     public override void PreDraw() 
@@ -55,7 +57,6 @@ public class MountInfoWindow : Window, IDisposable
                 if (Service.TextureProvider.GetIcon(mountIconID) is { ImGuiHandle: var mountIconTextureHandle } unknownTexture)
                 {
                     ImGui.Image(mountIconTextureHandle, ImGuiHelpers.ScaledVector2(plugin.Configuration.scale, plugin.Configuration.scale));
-                    //// Show tooltip with mount name on hover
                     if (ImGui.IsItemHovered())
                     {
                         ImGui.SetTooltip($"Riding: {mountName}");
