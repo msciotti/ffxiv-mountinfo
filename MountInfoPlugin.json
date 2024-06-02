@@ -15,7 +15,7 @@
         "DalamudApiLevel": 9,
         "IconUrl": "https://ffxiv.gamerescape.com/w/images/b/b0/MainIcon58.png",
         "Punchline": "See what mounts other players are riding.",
-        "DownloadLinkInstall": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/v1.0.1/MountInfo.zip",
-        "DownloadLinkUpdate": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/v1.0.1/MountInfo.zip"
+        "DownloadLinkInstall": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/v1.0.1.0/MountInfo.zip",
+        "DownloadLinkUpdate": "https://github.com/msciotti/ffxiv-mountinfo/releases/download/v1.0.1.0/MountInfo.zip"
     }
 ]
