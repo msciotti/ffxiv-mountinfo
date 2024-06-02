@@ -3,7 +3,7 @@
         "Author": "msciotti",
         "Name": "MountInfo",
         "InternalName": "MountInfoPlugin",
-        "AssemblyVersion": "1.0.0.0",
+        "AssemblyVersion": "1.0.1.0",
         "Description": "See what mounts other players are riding. /mountinfo to toggle on and off",
         "ApplicableVersion": "any",
         "Tags": [
