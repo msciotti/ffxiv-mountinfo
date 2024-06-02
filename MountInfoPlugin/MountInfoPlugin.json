@@ -1,0 +1,18 @@
+[
+    {
+        "Author": "msciotti",
+        "Name": "MountInfo",
+        "InternalName": "MountInfoPlugin",
+        "AssemblyVersion": "9.0.0.0",
+        "Description": "See what mounts other players are riding. /mountinfo to toggle on and off",
+        "ApplicableVersion": "any",
+        "Tags": [
+            "Mounts",
+            "Mount"
+        ],
+        "RepoUrl": "https://github.com/msciotti/ffxiv-mountinfo",
+        "DalamudApiLevel": 9,
+        "IconUrl": "https://ffxiv.gamerescape.com/w/images/b/b0/MainIcon58.png",
+        "Punchline": "See what mounts other players are riding."
+    }
+]
