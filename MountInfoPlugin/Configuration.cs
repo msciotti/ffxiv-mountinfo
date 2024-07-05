@@ -7,7 +7,7 @@ namespace MountInfo;
 [Serializable]
 public class Configuration : IPluginConfiguration
 {
-    private DalamudPluginInterface pluginInterface;
+    private IDalamudPluginInterface pluginInterface;
     public int Version { get; set; } = 0;
 
 
@@ -18,14 +18,14 @@ public class Configuration : IPluginConfiguration
 
     // the below exist just to make saving less cumbersome
     [NonSerialized]
-    private DalamudPluginInterface? PluginInterface;
+    private IDalamudPluginInterface? PluginInterface;
 
-    public void Initialize(DalamudPluginInterface pluginInterface)
+    public void Initialize(IDalamudPluginInterface pluginInterface)
     {
         PluginInterface = pluginInterface;
     }
 
-    public static Configuration Get(DalamudPluginInterface pluginInterface)
+    public static Configuration Get(IDalamudPluginInterface pluginInterface)
     {
         var config = pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         config.pluginInterface = pluginInterface;

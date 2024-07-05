@@ -12,7 +12,7 @@ public sealed class MountInfoPlugin : IDalamudPlugin
     private ConfigWindow ConfigWindow { get; }
     public MountInfoWindow MountInfoWindow { get; }
 
-    public MountInfoPlugin(DalamudPluginInterface pluginInterface) {
+    public MountInfoPlugin(IDalamudPluginInterface pluginInterface) {
         Service.Initialize(pluginInterface);
         Configuration = Configuration.Get(pluginInterface);
         ConfigWindow = new ConfigWindow(this);

@@ -36,7 +36,7 @@ public class MountInfoWindow : Window, IDisposable
     public Vector2? DrawHealthBarPosition()
     {
         var target = Service.TargetManager.Target;
-        if (target != null && target is PlayerCharacter playerCharacter)
+        if (target != null && target is IPlayerCharacter playerCharacter)
         {
             return Helpers.GetTargetHealthBarPosition(playerCharacter) + new Vector2(plugin.Configuration.xOffset, plugin.Configuration.yOffset);
         }
@@ -46,17 +46,17 @@ public class MountInfoWindow : Window, IDisposable
     public override void Draw()
     {
         var target = Service.TargetManager.Target;
-        if (target != null && target is PlayerCharacter playerCharacter)
+        if (target != null && target is IPlayerCharacter playerCharacter)
         {
             var mountID = Helpers.GetMountID(playerCharacter);
             if (mountID > 0)
             {
                 var mountName = Helpers.GetMountNameById(mountID);
                 var mountIconID = Helpers.GetMountIconID(mountID);
-
-                if (Service.TextureProvider.GetIcon(mountIconID) is { ImGuiHandle: var mountIconTextureHandle } unknownTexture)
+                var mountIconTexture = Service.TextureProvider.GetFromGameIcon(mountIconID).GetWrapOrEmpty();
+                if (mountIconTexture != null)
                 {
-                    ImGui.Image(mountIconTextureHandle, ImGuiHelpers.ScaledVector2(plugin.Configuration.scale, plugin.Configuration.scale));
+                    ImGui.Image(mountIconTexture.ImGuiHandle, ImGuiHelpers.ScaledVector2(plugin.Configuration.scale, plugin.Configuration.scale));
                     if (ImGui.IsItemHovered())
                     {
                         ImGui.SetTooltip($"Riding: {mountName}");
