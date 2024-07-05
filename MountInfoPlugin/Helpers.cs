@@ -7,7 +7,7 @@ namespace MountInfo
 {
     public static class Helpers
     {
-        public static unsafe uint GetMountID(PlayerCharacter playerCharacter)
+        public static unsafe uint GetMountID(IPlayerCharacter playerCharacter)
         {
             var characterPtr = (FFXIVClientStructs.FFXIV.Client.Game.Character.Character*)playerCharacter.Address;
             if (characterPtr == null) return 0;
@@ -38,7 +38,7 @@ namespace MountInfo
             return mountRow.Icon;
         }
 
-        public static unsafe Vector2? GetTargetHealthBarPosition(PlayerCharacter playerCharacter)
+        public static unsafe Vector2? GetTargetHealthBarPosition(IPlayerCharacter playerCharacter)
         {
             var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfo");
             if (targetInfoHud == null) return null;
@@ -52,7 +52,7 @@ namespace MountInfo
             return new Vector2(x, y);
         }
 
-        public static unsafe bool GetTargetHealthBarFocused(PlayerCharacter playerCharacter)
+        public static unsafe bool GetTargetHealthBarFocused(IPlayerCharacter playerCharacter)
         {
             var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfo");
             if (targetInfoHud == null) return false;
@@ -60,7 +60,7 @@ namespace MountInfo
             var healthBarNode = targetInfoHud->RootNode->ChildNode;
             if (healthBarNode == null) return false;
 
-            return healthBarNode->IsVisible;
+            return healthBarNode->IsVisible();
         }
     }
 }

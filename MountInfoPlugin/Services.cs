@@ -7,7 +7,7 @@ namespace MountInfo;
 
 internal class Service
 {
-    [PluginService] internal static DalamudPluginInterface PluginInterface { get; private set; }
+    [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; }
     [PluginService] internal static ICommandManager CommandManager { get; private set; }
     [PluginService] internal static IClientState ClientState { get; private set; }
     [PluginService] internal static ITargetManager TargetManager { get; private set; }
@@ -16,7 +16,7 @@ internal class Service
     [PluginService] internal static ITextureProvider TextureProvider { get; private set; }
     [PluginService] internal static IDataManager DataManager { get; private set; }
 
-    internal static void Initialize(DalamudPluginInterface pluginInterface)
+    internal static void Initialize(IDalamudPluginInterface pluginInterface)
     {
         pluginInterface.Create<Service>();
     }
