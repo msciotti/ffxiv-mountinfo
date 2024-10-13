@@ -40,7 +40,7 @@ namespace MountInfo
 
         public static unsafe Vector2? GetTargetHealthBarPosition(IPlayerCharacter playerCharacter)
         {
-            var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfo");
+            var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfoMainTarget");
             if (targetInfoHud == null) return null;
 
             var healthBarNode = (AtkResNode*)targetInfoHud->RootNode->ChildNode;
@@ -54,7 +54,7 @@ namespace MountInfo
 
         public static unsafe bool GetTargetHealthBarFocused(IPlayerCharacter playerCharacter)
         {
-            var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfo");
+            var targetInfoHud = (AtkUnitBase*)Service.GameGui.GetAddonByName("_TargetInfoMainTarget");
             if (targetInfoHud == null) return false;
 
             var healthBarNode = targetInfoHud->RootNode->ChildNode;
